@@ -1,12 +1,12 @@
-// Lógica do Modal de Detalhes
+// -------------------- Lógica do Modal de Detalhes --------------------
+const botoesDetalhes = document.querySelectorAll('.btn_detalhes');
 const modalDetalhes = document.getElementById('modalDetalhes');
 const fecharModal = document.getElementById('fecharModal');
-const botoesDetalhes = document.querySelectorAll('.btn_detalhes');
 
 botoesDetalhes.forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         // Pegar os dados
         const titulo = btn.getAttribute('data-titulo');
         const id = btn.getAttribute('data-id');
@@ -34,7 +34,7 @@ botoesDetalhes.forEach(btn => {
     });
 });
 
-if(fecharModal) {
+if (fecharModal) {
     fecharModal.addEventListener('click', () => {
         modalDetalhes.style.display = 'none';
     });
@@ -48,7 +48,7 @@ const botoesEditar = document.querySelectorAll('.btn_editar');
 botoesEditar.forEach(btn => {
     btn.addEventListener('click', (e) => {
         e.preventDefault();
-        
+
         const id = btn.getAttribute('data-id');
         const titulo = btn.getAttribute('data-titulo');
         const autor = btn.getAttribute('data-autor');
@@ -56,18 +56,18 @@ botoesEditar.forEach(btn => {
         const ano = btn.getAttribute('data-ano');
         const status = btn.getAttribute('data-status');
         const sinopse = btn.getAttribute('data-sinopse');
-        
+
         // Categorias
         const catIdsStr = btn.getAttribute('data-categoria-ids');
         const catNomesStr = btn.getAttribute('data-categoria-nomes');
-        
+
         document.getElementById('editId').value = id;
         document.getElementById('editTitulo').value = titulo;
         document.getElementById('editAutor').value = autor;
         document.getElementById('editEditora').value = editora;
         document.getElementById('editAnoPublicacao').value = ano;
         document.getElementById('editSinopse').value = sinopse;
-        
+
         // Status (D = Disponível, etc.) -> Ativo ou não.
         document.getElementById('editAtivo').checked = (status === 'D');
 
@@ -94,7 +94,7 @@ if(fecharModalEditar) {
     });
 }
 
-// Fechar ao clicar fora dos modais
+// -------------------- Fechar ao clicar fora dos modais --------------------
 window.addEventListener('click', (e) => {
     if (e.target === modalDetalhes) {
         modalDetalhes.style.display = 'none';
@@ -104,12 +104,12 @@ window.addEventListener('click', (e) => {
     }
 });
 
-// Lógica de busca
+// -------------------- Lógica de busca --------------------
 const inputBusca = document.getElementById('inputBusca');
 const linhasTabela = document.querySelectorAll('.container_lista_livros tbody tr');
 
 if (inputBusca) {
-    inputBusca.addEventListener('input', function() {
+    inputBusca.addEventListener('input', function () {
         const termo = this.value.toLowerCase();
 
         linhasTabela.forEach(linha => {
@@ -128,12 +128,12 @@ if (inputBusca) {
     });
 }
 
-// Lógica de exclusão com SweetAlert2
+// -------------------- Lógica de exclusão com SweetAlert2 --------------------
 const botoesExcluir = document.querySelectorAll('.btn_excluir_livro');
 botoesExcluir.forEach(btn => {
     btn.addEventListener('click', () => {
         const id = btn.getAttribute('data-id');
-        
+
         Swal.fire({
             title: 'Tem certeza?',
             text: "Esta ação não pode ser desfeita!",
@@ -201,6 +201,7 @@ function editAdicionarCat() {
     editRenderizarItens();
 }
 
+// // -------------------- Renderizar itens Cat --------------------
 function editRenderizarItens() {
     let template = "";
 
@@ -224,11 +225,10 @@ function editRenderizarItens() {
     editInputCategoriasSelecionadas.value = editCatsSelecionadas.map(c => c.id).join(',');
 }
 
+// -------------------- Excluir Cat da lista --------------------
 function editExcluirCat(id) {
     editCatsSelecionadas = editCatsSelecionadas.filter(item => item.id !== id);
     editRenderizarItens();
 }
 
-if(editBotaoInserir) {
-    editBotaoInserir.addEventListener("click", editAdicionarCat);
-}
+editBotaoInserir.addEventListener("click", editAdicionarCat);
