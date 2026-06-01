@@ -1,23 +1,75 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Bibliotec_MVC_DEV.Contexts;
+using Bibliotec_MVC_DEV.Interfaces;
+using Bibliotec_MVC_DEV.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bibliotec_MVC_DEV.Repositories
 {
     public class LivroRepository : ILivroRepository
     {
-        public LivroRepository(BdDbContext context)
+        private readonly BbDbContext _context;
+
+        public LivroRepository(BbDbContext context)
         {
             _context = context;
         }
-        public async <IEnumerable<Livro>> BuscarLivrosAsync()
-        {
-            return await _contex.Livro
-            .Include(l => l.LivroCategorias)
-            .ThenInclude(ln => lc.Categoria)
-            .ToListAsync();
 
+        public async Task<Livro?> BuscarLivroPorIdAsync(int id)
+        {
+            return await _context.Livro.FindAsync(id);
+        }
+
+        public async Task<IEnumerable<Livro>> BuscarLivrosAsync()
+        {
+            return await _context.Livro
+                .Include(l => l.LivroCategorias)
+                .ThenInclude(lc => lc.Categoria)
+                .ToListAsync();
+        }
+
+        public Task<IEnumerable<Livro>> BuscarLivrosComCatAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task CadastrarCatLivroAsync(LivroCategoria lc)
+        {
+            await _context.LivroCategoria.AddAsync(lc);
+            await _context.SaveChangesAsync();
+        }
+
+    public async Task CadastrarLivro(Livro l)
+        {
+            await _context.Livro.AddAsync(l);
+            await _context.SaveChangesAsync();
+        }
+
+        public Task DelatarLivroAsync(Livro l)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeletarCatLivroAsync(int idLivro)
+        {
+            IEnumerable<LivroCategoria> lcs = _context.LivroCategoria.Where(lc => lc.LivroId == idLivro);
+            _context.LivroCategoria.RemoveRange(lcs);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeletarLivroAsync(Livro l)
+        {
+            _context.Livro.Remove(l);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Categoria>> ListarCategoriaAsync()
+        {
+            return await _context.Categoria.ToListAsync();
+        }
+
+        public Task<IEnumerable<Categoria>> ListarCategoriasAsync()
+        {
+            throw new NotImplementedException();
         }
     }
 }
